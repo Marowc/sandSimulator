@@ -11,7 +11,7 @@ public class Renderer extends JPanel {
         JFrame frame = new JFrame("SandSimulator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
-        frame.setSize(800, 800);
+        frame.setSize(800, 828);
         frame.setVisible(true);
     }
 

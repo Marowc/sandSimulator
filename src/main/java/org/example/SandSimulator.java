@@ -1,13 +1,17 @@
 package org.example;
 
+import java.io.Console;
+
 public class SandSimulator {
     private Board board;
     private Renderer renderer;
+    private Controler controler;
     private boolean isRunning;
 
     public SandSimulator() {
         board = new Board(100, 100);
         renderer = new Renderer(board);
+        controler = new Controler(board);
         isRunning = true;
     }
 
@@ -39,8 +43,7 @@ public class SandSimulator {
     }
 
     public void addSand(int x, int y){
-        boolean sand = true;
-        board.setCell(x, y, sand);
+        board.setCell(x, y, true);
         renderer.repaint();
     }
 
