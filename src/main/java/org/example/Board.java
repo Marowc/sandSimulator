@@ -33,14 +33,21 @@ public class Board {
         }
     }
 
+    public synchronized void updatePart(int minY, int maxY) {
+        for (int y = maxY - 1; y >= minY; y--) {
+            for (int x = 0; x < width; x++) {
+                if (cells[y][x].isSand() && y + 1 < height && !cells[y + 1][x].isSand()) {
+                    cells[y + 1][x].setSand(true);
+                    cells[y][x].setSand(false);
+                }
+            }
+        }
+    }
+
     public void setCell(int x, int y, boolean sand){
         if (x >= 0 && x < width && y >= 0 && y < height) {
             cells[y][x].setSand(sand);
         }
-    }
-
-    public Cell getCell(int x, int y) {
-        return cells[y][x];
     }
 
     public Cell[][] getCells(){

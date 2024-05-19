@@ -5,14 +5,11 @@ import java.awt.*;
 
 public class Renderer extends JPanel {
     private Board board;
+    private int cellSize;
 
-    public Renderer(Board board) {
+    public Renderer(Board board, int cellSize) {
         this.board = board;
-        JFrame frame = new JFrame("SandSimulator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(this);
-        frame.setSize(800, 828);
-        frame.setVisible(true);
+        this.cellSize = cellSize;
     }
 
     @Override
@@ -26,7 +23,7 @@ public class Renderer extends JPanel {
                 } else {
                     g.setColor(Color.BLACK);
                 }
-                g.fillRect(x * 8, y * 8, 8, 8); // Rozmiar pojedynczej komórki
+                g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
             }
         }
     }
