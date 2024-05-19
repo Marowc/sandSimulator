@@ -13,7 +13,9 @@ public class SandSimulator {
     private static final int CELL_SIZE = 8;
     private static final int WIDTH = 800;
     private static final int HEIGTH = 640+28;
-    private static final int NUM_OF_THREADS = 4;
+    private static final int NUM_OF_THREADS = 1;
+
+
     public SandSimulator() {
         board = new Board(80,80);
         renderer = new Renderer(board, CELL_SIZE);
@@ -36,10 +38,22 @@ public class SandSimulator {
         threads = new Thread[NUM_OF_THREADS];
     }
 
-/*    public void start(){
+    /*public void start(){
+        isRunning = true;
+
         new Thread(() -> {
             while(isRunning){
                 board.update();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            while(isRunning){
                 renderer.repaint();
                 try {
                     Thread.sleep(100);
@@ -66,7 +80,7 @@ public class SandSimulator {
                     while (isRunning) {
                         board.updatePart(threadBegin, threadEnd);
                         try {
-                            Thread.sleep(80);
+                            Thread.sleep(50);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -75,42 +89,23 @@ public class SandSimulator {
                 threads[n].start();
             }
 
-            for (Thread thread : threads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
             new Thread(() -> {
                 while (isRunning) {
                     renderer.repaint();
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             }).start();
     }
 
     public void stop() {
         isRunning = false;
-/*        for (Thread thread : threads) {
-            if (thread != null) {
+        for (int i = 0; i < NUM_OF_THREADS; i++) {
+            if (threads[i] != null) {
                 try {
-                    thread.join();
+                    threads[i].join();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }
     }
-
-    public void addSand(int x, int y){
-        board.setCell(x, y, true);
-        renderer.repaint();
-    }
-
 }
