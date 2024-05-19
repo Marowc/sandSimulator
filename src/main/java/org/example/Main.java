@@ -8,14 +8,15 @@ public class Main {
         SandSimulator simulator = new SandSimulator();
         simulator.start();
 
-        String choice = null;
-        Scanner scan = new Scanner(System.in);
-        do {
-            choice = scan.nextLine();
-            switch (choice) {
-                case "a": simulator.start(); System.out.println("started"); break;
-                case "b": simulator.stop(); System.out.println("stopped"); break;
+        while (true) {
+            Thread.getAllStackTraces().keySet().forEach((t)
+                    -> System.out.println(t.getName()));
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } while (!choice.equals("q"));
+            System.out.println("---------------");
+        }
     }
 }

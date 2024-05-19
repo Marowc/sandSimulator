@@ -7,10 +7,12 @@ import java.awt.event.MouseMotionListener;
 public class Controler extends JPanel implements MouseListener, MouseMotionListener {
     private Board board;
     private int cellSize;
+    boolean click;
 
     public Controler(Board board, int cellSize) {
         this.board = board;
         this.cellSize = cellSize;
+        this.click = false;
         addMouseListener(this);
         addMouseMotionListener(this);
         setOpaque(false);
@@ -25,9 +27,14 @@ public class Controler extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
+    public boolean isPressed(){
+        return this.click;
+    }
+
     @Override
     public void mouseDragged(MouseEvent e) {
         addSand(e.getX(), e.getY());
+        this.click = true;
     }
 
     @Override
@@ -44,14 +51,17 @@ public class Controler extends JPanel implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseExited(MouseEvent e) {
+        this.click = false;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         addSand(e.getX(), e.getY());
+        this.click = true;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        this.click = false;
     }
 }

@@ -10,10 +10,11 @@ public class SandSimulator {
     private ButtonsPanel buttonsPanel;
     private boolean isRunning;
     Thread[] threads;
+    Thread renderThread;
     private static final int CELL_SIZE = 8;
     private static final int WIDTH = 800;
     private static final int HEIGTH = 640+28;
-    private static final int NUM_OF_THREADS = 1;
+    private static final int NUM_OF_THREADS = 3;
 
 
     public SandSimulator() {
@@ -97,14 +98,17 @@ public class SandSimulator {
                         }
                     }
                 });
+                threads[n].setName("updateThread-" + n);
                 threads[n].start();
             }
 
-            new Thread(() -> {
+            renderThread = new Thread(() -> {
                 while (isRunning) {
                     renderer.repaint();
                 }
-            }).start();
+            });
+            renderThread.setName("renderThread");
+            renderThread.start();
         }
     }
 
@@ -117,6 +121,13 @@ public class SandSimulator {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+        if (renderThread != null) {
+            try {
+                renderThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
