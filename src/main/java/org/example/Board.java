@@ -1,7 +1,5 @@
 package org.example;
 
-import java.awt.*;
-
 public class Board {
     private Cell[][] cells;
     private int width;
@@ -14,7 +12,7 @@ public class Board {
         initializeBoard();
     }
 
-    private void initializeBoard() {
+    public void initializeBoard() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 cells[y][x] = new Cell(false);
@@ -22,7 +20,7 @@ public class Board {
         }
     }
 
-    public void update() {
+/*    public void update() {
         for (int y = height - 2; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 if (cells[y][x].isSand() && y + 1 < height && !cells[y + 1][x].isSand()) {
@@ -31,8 +29,7 @@ public class Board {
                 }
             }
         }
-    }
-
+    }*/
     public synchronized void updatePart(int minY, int maxY) {
         for (int y = maxY - 1; y >= minY; y--) {
             for (int x = 0; x < width; x++) {

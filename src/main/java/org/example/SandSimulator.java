@@ -2,12 +2,12 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.Console;
 
 public class SandSimulator {
     private Board board;
     private Renderer renderer;
     private Controler controler;
+    private ButtonsPanel buttonsPanel;
     private boolean isRunning;
     Thread[] threads;
     private static final int CELL_SIZE = 8;
@@ -20,21 +20,31 @@ public class SandSimulator {
         board = new Board(80,80);
         renderer = new Renderer(board, CELL_SIZE);
         controler = new Controler(board, CELL_SIZE);
+        buttonsPanel = new ButtonsPanel(this);
 
         JFrame frame = new JFrame("Sand Simulator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new OverlayLayout(mainPanel));
+        mainPanel.setLayout(new BorderLayout());
 
-        mainPanel.add(renderer);
-        mainPanel.add(controler);
+        JPanel simulationPanel = new JPanel();
+        simulationPanel.setLayout(new OverlayLayout(simulationPanel));
+        simulationPanel.add(renderer);
+        simulationPanel.add(controler);
+
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(new BorderLayout());
+        menuPanel.add(buttonsPanel);
+
+        mainPanel.add(simulationPanel, BorderLayout.CENTER);
+        mainPanel.add(menuPanel, BorderLayout.EAST);
 
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.setSize(WIDTH, HEIGTH);
         frame.setVisible(true);
 
-        isRunning = true;
+        isRunning = false;
         threads = new Thread[NUM_OF_THREADS];
     }
 
@@ -64,15 +74,16 @@ public class SandSimulator {
         }).start();
     }*/
 
-    public void start(){
-        isRunning = true;
-        int step = board.getHeight() / NUM_OF_THREADS;
-        int rest = board.getHeight() % NUM_OF_THREADS;
-        int begin = 0, end = 0;
+    public void start() {
+        if (!isRunning) {
+            isRunning = true;
+            int step = board.getHeight() / NUM_OF_THREADS;
+            int rest = board.getHeight() % NUM_OF_THREADS;
+            int begin = 0, end = 0;
 
             for (int n = 0; n < NUM_OF_THREADS; n++) {
                 begin = end;
-                end += (n==NUM_OF_THREADS-1) ? step + rest : step;
+                end += (n == NUM_OF_THREADS - 1) ? step + rest : step;
 
                 int threadBegin = begin;
                 int threadEnd = end;
@@ -94,6 +105,7 @@ public class SandSimulator {
                     renderer.repaint();
                 }
             }).start();
+        }
     }
 
     public void stop() {
@@ -107,5 +119,10 @@ public class SandSimulator {
                 }
             }
         }
+    }
+
+    public void restart() {
+        board.initializeBoard();
+        if (!isRunning) renderer.repaint();
     }
 }
